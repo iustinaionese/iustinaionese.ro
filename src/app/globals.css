@@ -1,0 +1,305 @@
+@import "tailwindcss";
+
+/*
+  Iustin Aionese — design system
+  Dark cinematic primary, warm (not cold enterprise). One strong accent.
+*/
+
+:root {
+  /* Warm near-black base */
+  --bg: #0c0a0b;
+  --bg-elev: #181419;
+  --bg-elev-2: #221c25;
+
+  /* Warm off-white text */
+  --fg: #f6f3ee;
+  --fg-muted: #a39c93;
+  --fg-faint: #6f6962;
+
+  /* Single warm accent (coral/amber) + a gold support for highlights */
+  --accent: #ff6a3d;
+  --accent-strong: #ff855c;
+  --accent-deep: #e2511f;
+  --gold: #e4b974;
+
+  /* WhatsApp brand (icon only) */
+  --whatsapp: #25d366;
+
+  --border: rgba(246, 243, 238, 0.09);
+  --border-strong: rgba(246, 243, 238, 0.16);
+
+  --glow: rgba(255, 106, 61, 0.45);
+  --glow-soft: rgba(255, 106, 61, 0.18);
+
+  --radius: 1.1rem;
+}
+
+/* Light "breather" sections (warm cream) — overrides the raw tokens locally so
+   all var-based utilities (bg-bg, text-fg, border-border, …) invert. */
+.theme-light {
+  --bg: #f4eee4;
+  --bg-elev: #ffffff;
+  --bg-elev-2: #ece4d7;
+  --fg: #1a1512;
+  --fg-muted: #6a6158;
+  --fg-faint: #9c9388;
+  --border: rgba(26, 21, 18, 0.1);
+  --border-strong: rgba(26, 21, 18, 0.18);
+  --glow-soft: rgba(255, 106, 61, 0.1);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-bg-elev-2: var(--bg-elev-2);
+
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-faint: var(--fg-faint);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-deep: var(--accent-deep);
+  --color-gold: var(--gold);
+  --color-whatsapp: var(--whatsapp);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-fraunces);
+
+  --radius-xl2: var(--radius);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent);
+  color: #160a05;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(246, 243, 238, 0.22);
+  border-radius: 999px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(246, 243, 238, 0.34);
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(246, 243, 238, 0.22) var(--bg);
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Hand cursor on every interactive button (browsers default to the arrow). */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+/* ---------- Utilities ---------- */
+
+@utility font-display {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-optical-sizing: auto;
+}
+
+@utility font-mono-accent {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+/* Frosted glass (matured 2026 usage — restrained) */
+@utility glass {
+  background: color-mix(in oklab, var(--bg-elev) 70%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--border);
+}
+
+/* Soft accent glow behind elements */
+@utility glow-accent {
+  box-shadow:
+    0 0 0 1px var(--border),
+    0 30px 80px -40px var(--glow);
+}
+
+/* Eyebrow / metadata label (monospace, tracked) */
+@utility eyebrow {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+/* Gradient accent text */
+@utility text-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--fg) 0%,
+    var(--fg) 40%,
+    var(--accent-strong) 75%,
+    var(--gold) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Hairline grid background */
+@utility bg-grid {
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Subtle film grain overlay */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* No mix-blend-mode: a blended full-screen fixed layer forces a full
+     re-composite every scroll frame (jank). Plain low-opacity alpha is cheap. */
+}
+
+/* Hand-drawn underline accent */
+.handdrawn-underline {
+  position: relative;
+  display: inline-block;
+}
+.handdrawn-underline::after {
+  content: "";
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: -0.18em;
+  height: 0.5em;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='20' viewBox='0 0 200 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 13C40 6 90 4 140 8C160 9.5 185 12 197 7' stroke='%23FF6A3D' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+/* SplitText masked-line reveal: give descenders/diacritics (y, g, ț, ș, p)
+   room so the line mask doesn't clip them. */
+.reveal-line {
+  padding-bottom: 0.18em;
+}
+
+/* AnimatedHeading: hidden until SplitText takes over — only when motion is
+   allowed (reduced-motion users get the plain, visible heading). */
+@media (prefers-reduced-motion: no-preference) {
+  .split-pending {
+    opacity: 0;
+  }
+}
+
+/* Above-the-fold heading entrance: pure CSS, runs on first paint, so the
+   heading doesn't wait for hydration (good for LCP). */
+@keyframes heading-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.3em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.heading-rise {
+  animation: heading-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Marquee */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 38s linear infinite;
+}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+/* CV printing (/cv, /en/cv). The PDFs in public/cv are printed from these
+   pages (scripts/cv-pdf.mjs), so this is also the PDF layout. A named page
+   keeps the A4 size and margins to the CV; other pages print as before. */
+@page cv {
+  size: A4;
+  margin: 13mm 15mm 12mm;
+  background: #fff;
+}
+@media print {
+  /* The site is color-scheme: dark; without this Chrome paints the page
+     margins dark in the PDF. */
+  html:has([data-cv]) {
+    color-scheme: light;
+  }
+  html:has([data-cv]),
+  html:has([data-cv]) body {
+    background: #fff;
+  }
+  html:has([data-cv]) body > header,
+  html:has([data-cv]) body > footer,
+  html:has([data-cv]) body.grain::after {
+    display: none;
+  }
+}

@@ -1,0 +1,209 @@
+/* The CV paper. Sizes are in pt so screen, print and the PDF match.
+   Text colours keep >= 4.5:1 contrast on white (the site accent #ff6a3d
+   only reaches ~2.8:1, hence the darker --cv-accent). */
+.doc {
+  page: cv;
+  --cv-ink: #1a1512;
+  --cv-text: #2b2521;
+  --cv-muted: #5c544c;
+  --cv-accent: #b8431b;
+  --cv-rule: #e7dfd4;
+  box-sizing: border-box;
+  width: 210mm;
+  max-width: 100%;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 13mm 15mm 12mm;
+  background: #fff;
+  color: var(--cv-text);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 9.6pt;
+  line-height: 1.38;
+  border-radius: 6px;
+  box-shadow:
+    0 40px 90px -40px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.doc a {
+  color: inherit;
+  text-decoration: none;
+}
+.doc a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 25pt;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--cv-ink);
+}
+
+.headline {
+  margin: 4pt 0 0;
+  font-size: 11.5pt;
+  font-weight: 600;
+  color: var(--cv-accent);
+}
+
+.contact {
+  margin: 3pt 0 0;
+  font-size: 8.8pt;
+  color: var(--cv-muted);
+}
+.headline + .contact {
+  margin-top: 5pt;
+}
+
+.section {
+  margin-top: 11pt;
+}
+
+/* Small caps-like label with a hairline under it. Very light tracking:
+   wide letter-spacing can make PDF text extraction split the word. */
+.heading {
+  margin: 0 0 4pt;
+  padding-bottom: 2.5pt;
+  border-bottom: 0.75pt solid var(--cv-rule);
+  font-size: 8.6pt;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cv-accent);
+  break-after: avoid;
+}
+
+.item + .item {
+  margin-top: 6pt;
+}
+
+/* Title on the left, dates on the right, company on the line below:
+   no awkward wraps when the company name is long. */
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10pt;
+  break-after: avoid;
+}
+
+.title {
+  margin: 0;
+  font-size: 10pt;
+  font-weight: 650;
+  line-height: 1.3;
+  color: var(--cv-ink);
+}
+
+.org {
+  margin: 0;
+  font-size: 9.2pt;
+  color: var(--cv-muted);
+  break-after: avoid;
+}
+
+.dates {
+  flex: none;
+  margin: 0;
+  font-size: 8.8pt;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--cv-muted);
+}
+
+.bullets {
+  margin: 2.5pt 0 0;
+  padding-left: 11pt;
+  list-style: disc;
+}
+.bullets li {
+  margin-top: 1.6pt;
+  break-inside: avoid;
+  /* No lone word (e.g. "8%.") on a bullet's last line. */
+  text-wrap: pretty;
+}
+.bullets li::marker {
+  color: var(--cv-accent);
+}
+
+.plain {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.plain li + li {
+  margin-top: 2pt;
+}
+
+.lead {
+  font-weight: 650;
+  color: var(--cv-ink);
+}
+
+@media (max-width: 640px) {
+  .doc {
+    min-height: 0;
+    padding: 22px 18px;
+    font-size: 9.2pt;
+  }
+  .row {
+    flex-wrap: wrap;
+    gap: 0 10pt;
+  }
+}
+
+/* On-screen text size (CvTextSize sets html[data-cv-text]; default "m").
+   The paper keeps its A4 width and only its contents scale, so lines
+   re-wrap instead of the page growing sideways. Screen only: print and
+   the PDFs always use the sizes above. */
+@media screen {
+  .doc > * {
+    zoom: 1.2;
+  }
+  :global(html[data-cv-text="s"]) .doc > * {
+    zoom: 1;
+  }
+  :global(html[data-cv-text="l"]) .doc > * {
+    zoom: 1.4;
+  }
+}
+
+/* The switch needs JS, so it stays hidden until its inline script has set
+   html[data-cv-text]. */
+.sizeBar {
+  display: none;
+}
+:global(html[data-cv-text]) .sizeBar {
+  display: flex;
+}
+
+.sizeBtn {
+  color: var(--fg-muted);
+}
+.sizeBtn:hover {
+  color: var(--fg);
+}
+:global(html[data-cv-text="s"]) .sizeBtn[data-size="s"],
+:global(html[data-cv-text="m"]) .sizeBtn[data-size="m"],
+:global(html[data-cv-text="l"]) .sizeBtn[data-size="l"] {
+  background: var(--accent);
+  color: #1a0c05;
+}
+
+/* Printing: the page margins come from @page cv (globals.css). */
+@media print {
+  .doc {
+    width: auto;
+    max-width: none;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
